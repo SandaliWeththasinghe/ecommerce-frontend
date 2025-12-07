@@ -1,0 +1,96 @@
+import { Pencil, Trash2 } from "lucide-react";
+import { Order } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+interface OrderTableProps {
+  orders: Order[];
+  onEdit?: (orderId: number) => void;
+  onDelete?: (orderId: number) => void;
+}
+
+export function OrderTable({
+  orders,
+  onEdit,
+  onDelete,
+}: Readonly<OrderTableProps>) {
+  return (
+    <div className="hidden rounded-lg border border-zinc-200 bg-white shadow-sm md:block">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-zinc-50">
+              <TableHead className="w-[100px] font-semibold">
+                Order ID
+              </TableHead>
+              <TableHead className="font-semibold">Order Description</TableHead>
+              <TableHead className="font-semibold">Products</TableHead>
+              <TableHead className="font-semibold">Created Date</TableHead>
+              <TableHead className="text-right font-semibold">
+                Actions
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="h-32 text-center text-zinc-500"
+                >
+                  No orders found
+                </TableCell>
+              </TableRow>
+            ) : (
+              orders.map((order) => (
+                <TableRow key={order.id} className="hover:bg-zinc-50">
+                  <TableCell className="font-medium">{order.id}</TableCell>
+                  <TableCell>{order.description}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="secondary"
+                      className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                    >
+                      {order.products.length}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-zinc-600">
+                    {order.createdDate}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-zinc-600 hover:text-zinc-900"
+                        onClick={() => onEdit?.(order.id)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-zinc-600 hover:text-red-600"
+                        onClick={() => onDelete?.(order.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}
