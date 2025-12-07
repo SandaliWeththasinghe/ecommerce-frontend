@@ -12,12 +12,15 @@ export const ordersApi = {
       params: {
         page: params?.page || 1,
         limit: params?.limit || 10,
+        search: params?.search || "",
       },
     });
     return response.data;
   },
 
-  createOrder: async (data: CreateOrderRequest): Promise<CreateOrderResponse> => {
+  createOrder: async (
+    data: CreateOrderRequest
+  ): Promise<CreateOrderResponse> => {
     const response = await apiClient.post<CreateOrderResponse>("/orders", data);
     return response.data;
   },

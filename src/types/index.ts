@@ -36,6 +36,7 @@ export interface ApiError {
 export interface GetOrdersParams {
   page?: number;
   limit?: number;
+  search?: string;
 }
 
 export interface GetOrdersResponse {

@@ -15,12 +15,14 @@ interface OrderTableProps {
   orders: Order[];
   onEdit?: (orderId: number) => void;
   onDelete?: (orderId: number) => void;
+  isLoading?: boolean;
 }
 
 export function OrderTable({
   orders,
   onEdit,
   onDelete,
+  isLoading = false,
 }: Readonly<OrderTableProps>) {
   return (
     <div className="hidden rounded-lg border border-zinc-200 bg-white shadow-sm md:block">
@@ -40,7 +42,16 @@ export function OrderTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orders.length === 0 ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={5} className="h-32 text-center">
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-emerald-600 border-r-transparent"></div>
+                    <span className="text-zinc-600">Loading orders...</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : orders.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={5}
@@ -53,7 +64,9 @@ export function OrderTable({
               orders.map((order) => (
                 <TableRow key={order.id} className="hover:bg-zinc-50">
                   <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{order.orderDescription || order.description}</TableCell>
+                  <TableCell>
+                    {order.orderDescription || order.description}
+                  </TableCell>
                   <TableCell>
                     <Badge
                       variant="secondary"
@@ -63,7 +76,9 @@ export function OrderTable({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-zinc-600">
-                    {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : order.createdDate}
+                    {order.createdAt
+                      ? new Date(order.createdAt).toLocaleDateString()
+                      : order.createdDate}
                   </TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">

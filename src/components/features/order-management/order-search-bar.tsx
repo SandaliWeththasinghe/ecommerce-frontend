@@ -11,7 +11,7 @@ export function OrderSearchBar({
   searchQuery,
   onSearchChange,
   orderCount,
-}: OrderSearchBarProps) {
+}: Readonly<OrderSearchBarProps>) {
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="relative w-full sm:max-w-md">

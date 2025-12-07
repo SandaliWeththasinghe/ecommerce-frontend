@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { OrderManagementHeader } from "@/components/features/order-management/order-management-header";
 import { OrderSearchBar } from "@/components/features/order-management/order-search-bar";
 import { OrderMobileCardList } from "@/components/features/order-management/order-mobile-card-list";
@@ -18,25 +17,16 @@ export default function OrderManagementPage() {
     limit,
     handlePageChange,
     handleLimitChange,
-  } = useOrders();
+    search,
+    handleSearchChange,
+  } = useOrders() as any;
 
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredOrders = useMemo(
-    () =>
-      orders.filter((order) => {
-        const description = order.orderDescription || order.description || "";
-        return description.toLowerCase().includes(searchQuery.toLowerCase());
-      }),
-    [orders, searchQuery]
-  );
+  const searchQuery = search;
 
   const startIndex = (currentPage - 1) * limit;
   const endIndex = startIndex + limit;
 
-  const handleSearchChange = (value: string) => {
-    setSearchQuery(value);
-  };
+  // `handleSearchChange` comes from the `useOrders` hook and triggers a server fetch
 
   const handleEdit = (orderId: number) => {
     console.log("Edit order:", orderId);
@@ -46,21 +36,8 @@ export default function OrderManagementPage() {
     console.log("Delete order:", orderId);
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-zinc-50">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <OrderManagementHeader />
-          <div className="flex h-64 items-center justify-center">
-            <div className="text-center">
-              <div className="mb-4 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-emerald-600 border-r-transparent"></div>
-              <p className="text-sm text-zinc-600">Loading orders...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Always render the page structure (header, search, pagination).
+  // The `OrderTable` will show an inline loader when `isLoading` is true.
 
   return (
     <div className="min-h-screen bg-zinc-50">
@@ -70,19 +47,20 @@ export default function OrderManagementPage() {
         <OrderSearchBar
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
-          orderCount={filteredOrders.length}
+          orderCount={totalOrders}
         />
 
         <OrderMobileCardList
-          orders={filteredOrders}
+          orders={orders}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
 
         <OrderTable
-          orders={filteredOrders}
+          orders={orders}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          isLoading={isLoading}
         />
 
         <OrderPagination
