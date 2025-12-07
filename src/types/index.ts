@@ -10,3 +10,21 @@ export interface Order {
   products: Product[];
   createdDate: string;
 }
+
+export interface CreateOrderRequest {
+  orderDescription: string;
+  productIds: number[];
+}
+
+export interface CreateOrderResponse {
+  id: number;
+  orderDescription: string;
+  productIds: number[];
+  createdAt: string;
+}
+
+export interface ApiError {
+  message: string;
+  statusCode?: number;
+  errors?: Record<string, string[]>;
+}

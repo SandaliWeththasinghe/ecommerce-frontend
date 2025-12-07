@@ -1,4 +1,4 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Loader2 } from "lucide-react";
 import { Product } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ interface OrderFormProps {
   onCancel: () => void;
   onSubmit: () => void;
   isSubmitDisabled: boolean;
+  isLoading?: boolean;
 }
 
 export function OrderForm({
@@ -25,6 +26,7 @@ export function OrderForm({
   onCancel,
   onSubmit,
   isSubmitDisabled,
+  isLoading = false,
 }: Readonly<OrderFormProps>) {
   return (
     <>
@@ -48,8 +50,10 @@ export function OrderForm({
               type="text"
               placeholder="Enter order description..."
               value={orderDescription}
+              maxLength={100}
               onChange={(e) => onOrderDescriptionChange(e.target.value)}
               className="w-full"
+              disabled={isLoading}
             />
           </div>
 
@@ -66,6 +70,7 @@ export function OrderForm({
           variant="outline"
           onClick={onCancel}
           className="w-full sm:w-auto"
+          disabled={isLoading}
         >
           Cancel
         </Button>
@@ -74,8 +79,17 @@ export function OrderForm({
           disabled={isSubmitDisabled}
           className="w-full bg-emerald-600 hover:bg-emerald-700 sm:w-auto"
         >
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Submit Order
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Submitting...
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              Submit Order
+            </>
+          )}
         </Button>
       </div>
     </>

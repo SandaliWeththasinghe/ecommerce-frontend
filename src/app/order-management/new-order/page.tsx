@@ -14,6 +14,7 @@ export default function NewOrderPage() {
     handleSubmit,
     handleCancel,
     isSubmitDisabled,
+    isLoading,
   } = useNewOrderForm();
 
   return (
@@ -30,6 +31,7 @@ export default function NewOrderPage() {
           onCancel={handleCancel}
           onSubmit={handleSubmit}
           isSubmitDisabled={isSubmitDisabled}
+          isLoading={isLoading}
         />
       </div>
     </div>
