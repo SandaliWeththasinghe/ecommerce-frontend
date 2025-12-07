@@ -50,11 +50,11 @@ export function OrderMobileCard({
           </div>
         </div>
         <h3 className="mb-2 font-medium text-zinc-900">
-          {order.description}
+          {order.orderDescription || order.description}
         </h3>
         <div className="flex items-center gap-1.5 text-sm text-zinc-600">
           <Calendar className="h-3.5 w-3.5" />
-          <span>{order.createdDate}</span>
+          <span>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : order.createdDate}</span>
         </div>
       </CardContent>
     </Card>

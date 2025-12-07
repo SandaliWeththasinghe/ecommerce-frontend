@@ -53,7 +53,7 @@ export function OrderTable({
               orders.map((order) => (
                 <TableRow key={order.id} className="hover:bg-zinc-50">
                   <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{order.description}</TableCell>
+                  <TableCell>{order.orderDescription || order.description}</TableCell>
                   <TableCell>
                     <Badge
                       variant="secondary"
@@ -63,7 +63,7 @@ export function OrderTable({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-zinc-600">
-                    {order.createdDate}
+                    {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : order.createdDate}
                   </TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">

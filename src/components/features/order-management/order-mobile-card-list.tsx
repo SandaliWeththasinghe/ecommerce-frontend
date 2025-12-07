@@ -12,10 +12,10 @@ export function OrderMobileCardList({
   orders,
   onEdit,
   onDelete,
-}: OrderMobileCardListProps) {
+}: Readonly<OrderMobileCardListProps>) {
   if (orders.length === 0) {
     return (
-      <Card>
+      <Card className="space-y-4 md:hidden">
         <CardContent className="flex h-32 items-center justify-center text-zinc-500">
           No orders found
         </CardContent>

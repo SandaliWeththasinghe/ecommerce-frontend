@@ -8,9 +8,10 @@ export function useOrderPagination(orders: Order[]) {
 
   const filteredOrders = useMemo(
     () =>
-      orders.filter((order) =>
-        order.description.toLowerCase().includes(searchQuery.toLowerCase())
-      ),
+      orders.filter((order) => {
+        const description = order.orderDescription || order.description || "";
+        return description.toLowerCase().includes(searchQuery.toLowerCase());
+      }),
     [orders, searchQuery]
   );
 
