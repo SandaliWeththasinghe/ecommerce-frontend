@@ -52,11 +52,17 @@ yarn install
 
 Create a `.env.local` file in the root directory:
 
+**For Local Development:**
 ```bash
 NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api
 ```
 
-Update the `NEXT_PUBLIC_API_BASE_URL` to match your backend API URL.
+**For Production:**
+```bash
+NEXT_PUBLIC_API_BASE_URL=https://ecommerce-backend-production-7f55.up.railway.app/api
+```
+
+Choose the appropriate URL based on your environment. For local development, ensure your backend server is running on `http://localhost:5000`.
 
 ### 4. Run the development server
 
