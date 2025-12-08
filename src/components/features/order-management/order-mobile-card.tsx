@@ -46,7 +46,7 @@ export function OrderMobileCard({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-zinc-600 hover:text-zinc-900"
+              className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-200"
               onClick={() => onEdit?.(order.id)}
             >
               <Pencil className="h-4 w-4" />
@@ -56,7 +56,7 @@ export function OrderMobileCard({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-zinc-600 hover:text-red-600"
+                  className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-200"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
