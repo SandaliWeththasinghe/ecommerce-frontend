@@ -3,6 +3,7 @@ import { Order } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatDate } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -83,11 +84,7 @@ export function OrderMobileCard({
         </h3>
         <div className="flex items-center gap-1.5 text-sm text-zinc-600">
           <Calendar className="h-3.5 w-3.5" />
-          <span>
-            {order.createdAt
-              ? new Date(order.createdAt).toLocaleDateString()
-              : order.createdDate}
-          </span>
+          <span>{formatDate(order.createdAt || order.createdDate)}</span>
         </div>
       </CardContent>
     </Card>
