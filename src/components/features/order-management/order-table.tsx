@@ -2,6 +2,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Order } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -87,9 +88,7 @@ export function OrderTable({
                     </Badge>
                   </TableCell>
                   <TableCell className="text-zinc-600">
-                    {order.createdAt
-                      ? new Date(order.createdAt).toLocaleDateString()
-                      : order.createdDate}
+                    {formatDate(order.createdAt || order.createdDate)}
                   </TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">

@@ -18,7 +18,7 @@ export function OrderSearchBar({
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
         <Input
           type="text"
-          placeholder="Search by order description..."
+          placeholder="Search by order ID and order description..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="pl-10"
