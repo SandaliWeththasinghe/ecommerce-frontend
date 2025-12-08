@@ -4,6 +4,9 @@ import {
   CreateOrderResponse,
   GetOrdersParams,
   GetOrdersResponse,
+  GetOrderByIdResponse,
+  UpdateOrderRequest,
+  UpdateOrderResponse,
 } from "@/types";
 
 export const ordersApi = {
@@ -22,6 +25,24 @@ export const ordersApi = {
     data: CreateOrderRequest
   ): Promise<CreateOrderResponse> => {
     const response = await apiClient.post<CreateOrderResponse>("/orders", data);
+    return response.data;
+  },
+
+  getOrderById: async (orderId: number): Promise<GetOrderByIdResponse> => {
+    const response = await apiClient.get<GetOrderByIdResponse>(
+      `/orders/${orderId}`
+    );
+    return response.data;
+  },
+
+  updateOrder: async (
+    orderId: number,
+    data: UpdateOrderRequest
+  ): Promise<UpdateOrderResponse> => {
+    const response = await apiClient.put<UpdateOrderResponse>(
+      `/orders/${orderId}`,
+      data
+    );
     return response.data;
   },
 };

@@ -6,8 +6,10 @@ import { OrderMobileCardList } from "@/components/features/order-management/orde
 import { OrderTable } from "@/components/features/order-management/order-table";
 import { OrderPagination } from "@/components/features/order-management/order-pagination";
 import { useOrders } from "@/hooks/use-orders";
+import { useRouter } from "next/navigation";
 
 export default function OrderManagementPage() {
+  const router = useRouter();
   const {
     orders,
     isLoading,
@@ -29,7 +31,7 @@ export default function OrderManagementPage() {
   // `handleSearchChange` comes from the `useOrders` hook and triggers a server fetch
 
   const handleEdit = (orderId: number) => {
-    console.log("Edit order:", orderId);
+    router.push(`/order-management/new-order?id=${orderId}`);
   };
 
   const handleDelete = (orderId: number) => {

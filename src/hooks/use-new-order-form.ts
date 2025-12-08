@@ -5,12 +5,51 @@ import { toast } from "sonner";
 import { ordersApi } from "@/lib/api/orders";
 import { ApiError } from "@/types";
 
-export function useNewOrderForm() {
+export function useNewOrderForm(orderId?: number) {
   const router = useRouter();
   const [orderDescription, setOrderDescription] = useState("");
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOrder, setIsLoadingOrder] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const redirectTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Load order data when orderId is provided
+  useEffect(() => {
+    if (orderId) {
+      const loadOrder = async () => {
+        setIsLoadingOrder(true);
+        try {
+          const orderData = await ordersApi.getOrderById(orderId);
+          setOrderDescription(orderData.orderDescription);
+          setSelectedProducts(orderData.products.map((p) => p.id));
+          setIsEditMode(true);
+        } catch (err) {
+          const axiosError = err as AxiosError<ApiError>;
+          const errorMessage =
+            axiosError.response?.data?.message ||
+            "Failed to load order. Please try again.";
+
+          console.error("Error loading order:", err);
+
+          toast.error("Failed to load order", {
+            description: errorMessage,
+            style: {
+              background: "#ef4444",
+              color: "#ffffff",
+              border: "1px solid #dc2626",
+            },
+          });
+
+          router.push("/order-management");
+        } finally {
+          setIsLoadingOrder(false);
+        }
+      };
+
+      loadOrder();
+    }
+  }, [orderId, router]);
 
   useEffect(() => {
     return () => {
@@ -32,21 +71,41 @@ export function useNewOrderForm() {
     setIsLoading(true);
 
     try {
-      const response = await ordersApi.createOrder({
-        orderDescription: orderDescription.trim(),
-        productIds: selectedProducts,
-      });
+      if (isEditMode && orderId) {
+        // Update order
+        const response = await ordersApi.updateOrder(orderId, {
+          orderDescription: orderDescription.trim(),
+          productIds: selectedProducts,
+        });
 
-      console.log("Order created successfully:", response);
+        console.log("Order updated successfully:", response);
 
-      toast.success("Order created successfully!", {
-        description: "Redirecting to order management page...",
-        style: {
-          background: "#10b981",
-          color: "#ffffff",
-          border: "1px solid #059669",
-        },
-      });
+        toast.success("Order updated successfully!", {
+          description: "Redirecting to order management page...",
+          style: {
+            background: "#10b981",
+            color: "#ffffff",
+            border: "1px solid #059669",
+          },
+        });
+      } else {
+        // Create new order
+        const response = await ordersApi.createOrder({
+          orderDescription: orderDescription.trim(),
+          productIds: selectedProducts,
+        });
+
+        console.log("Order created successfully:", response);
+
+        toast.success("Order created successfully!", {
+          description: "Redirecting to order management page...",
+          style: {
+            background: "#10b981",
+            color: "#ffffff",
+            border: "1px solid #059669",
+          },
+        });
+      }
 
       redirectTimerRef.current = setTimeout(() => {
         router.push("/order-management");
@@ -55,11 +114,16 @@ export function useNewOrderForm() {
       const axiosError = err as AxiosError<ApiError>;
       const errorMessage =
         axiosError.response?.data?.message ||
-        "Failed to create order. Please try again.";
+        `Failed to ${
+          isEditMode ? "update" : "create"
+        } order. Please try again.`;
 
-      console.error("Error creating order:", err);
+      console.error(
+        `Error ${isEditMode ? "updating" : "creating"} order:`,
+        err
+      );
 
-      toast.error("Failed to create order", {
+      toast.error(`Failed to ${isEditMode ? "update" : "create"} order`, {
         description: `${errorMessage}. Redirecting back in a moment...`,
         style: {
           background: "#ef4444",
@@ -74,7 +138,7 @@ export function useNewOrderForm() {
     } finally {
       setIsLoading(false);
     }
-  }, [orderDescription, selectedProducts, router]);
+  }, [orderDescription, selectedProducts, router, isEditMode, orderId]);
 
   const handleCancel = useCallback(() => {
     router.push("/order-management");
@@ -82,8 +146,11 @@ export function useNewOrderForm() {
 
   const isSubmitDisabled = useMemo(
     () =>
-      !orderDescription.trim() || selectedProducts.length === 0 || isLoading,
-    [orderDescription, selectedProducts, isLoading]
+      !orderDescription.trim() ||
+      selectedProducts.length === 0 ||
+      isLoading ||
+      isLoadingOrder,
+    [orderDescription, selectedProducts, isLoading, isLoadingOrder]
   );
 
   return {
@@ -95,5 +162,7 @@ export function useNewOrderForm() {
     handleCancel,
     isSubmitDisabled,
     isLoading,
+    isLoadingOrder,
+    isEditMode,
   };
 }

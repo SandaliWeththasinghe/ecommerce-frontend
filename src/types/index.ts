@@ -27,6 +27,25 @@ export interface CreateOrderResponse {
   createdAt: string;
 }
 
+export interface GetOrderByIdResponse {
+  id: number;
+  orderDescription: string;
+  createdAt: string;
+  products: Product[];
+}
+
+export interface UpdateOrderRequest {
+  orderDescription: string;
+  productIds: number[];
+}
+
+export interface UpdateOrderResponse {
+  id: number;
+  orderDescription: string;
+  productIds: number[];
+  createdAt: string;
+}
+
 export interface ApiError {
   message: string;
   statusCode?: number;

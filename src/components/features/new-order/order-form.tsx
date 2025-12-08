@@ -15,6 +15,7 @@ interface OrderFormProps {
   onSubmit: () => void;
   isSubmitDisabled: boolean;
   isLoading?: boolean;
+  isEditMode?: boolean;
 }
 
 export function OrderForm({
@@ -27,6 +28,7 @@ export function OrderForm({
   onSubmit,
   isSubmitDisabled,
   isLoading = false,
+  isEditMode = false,
 }: Readonly<OrderFormProps>) {
   return (
     <>
@@ -82,12 +84,12 @@ export function OrderForm({
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Submitting...
+              {isEditMode ? "Updating..." : "Submitting..."}
             </>
           ) : (
             <>
               <ShoppingCart className="mr-2 h-4 w-4" />
-              Submit Order
+              {isEditMode ? "Update Order" : "Submit Order"}
             </>
           )}
         </Button>
