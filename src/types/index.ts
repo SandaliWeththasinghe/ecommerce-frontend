@@ -46,6 +46,10 @@ export interface UpdateOrderResponse {
   createdAt: string;
 }
 
+export interface DeleteOrderResponse {
+  message: string;
+}
+
 export interface ApiError {
   message: string;
   statusCode?: number;

@@ -3,6 +3,17 @@ import { Order } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 
 interface OrderMobileCardProps {
   order: Order;
@@ -14,7 +25,7 @@ export function OrderMobileCard({
   order,
   onEdit,
   onDelete,
-}: OrderMobileCardProps) {
+}: Readonly<OrderMobileCardProps>) {
   return (
     <Card className="overflow-hidden shadow-sm">
       <CardContent className="p-4">
@@ -39,14 +50,32 @@ export function OrderMobileCard({
             >
               <Pencil className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-zinc-600 hover:text-red-600"
-              onClick={() => onDelete?.(order.id)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-zinc-600 hover:text-red-600"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Order</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete order #{order.id}? This
+                    action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => onDelete?.(order.id)}>
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <h3 className="mb-2 font-medium text-zinc-900">
@@ -54,7 +83,11 @@ export function OrderMobileCard({
         </h3>
         <div className="flex items-center gap-1.5 text-sm text-zinc-600">
           <Calendar className="h-3.5 w-3.5" />
-          <span>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : order.createdDate}</span>
+          <span>
+            {order.createdAt
+              ? new Date(order.createdAt).toLocaleDateString()
+              : order.createdDate}
+          </span>
         </div>
       </CardContent>
     </Card>

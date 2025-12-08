@@ -7,6 +7,8 @@ import { OrderTable } from "@/components/features/order-management/order-table";
 import { OrderPagination } from "@/components/features/order-management/order-pagination";
 import { useOrders } from "@/hooks/use-orders";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { ordersApi } from "@/lib/api/orders";
 
 export default function OrderManagementPage() {
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function OrderManagementPage() {
     handleLimitChange,
     search,
     handleSearchChange,
+    refetch,
   } = useOrders() as any;
 
   const searchQuery = search;
@@ -34,8 +37,32 @@ export default function OrderManagementPage() {
     router.push(`/order-management/new-order?id=${orderId}`);
   };
 
-  const handleDelete = (orderId: number) => {
-    console.log("Delete order:", orderId);
+  const handleDelete = async (orderId: number) => {
+    try {
+      const res = await ordersApi.deleteOrder(orderId);
+
+      toast.success(res?.message || "Order deleted successfully", {
+        description: `Order ${orderId} has been deleted.`,
+        style: {
+          background: "#10b981",
+          color: "#ffffff",
+          border: "1px solid #059669",
+        },
+      });
+
+      // Refresh list
+      refetch();
+    } catch (err) {
+      console.error("Error deleting order:", err);
+      toast.error("Failed to delete order", {
+        description: "Please try again.",
+        style: {
+          background: "#ef4444",
+          color: "#ffffff",
+          border: "1px solid #dc2626",
+        },
+      });
+    }
   };
 
   // Always render the page structure (header, search, pagination).

@@ -45,4 +45,8 @@ export const ordersApi = {
     );
     return response.data;
   },
+  deleteOrder: async (orderId: number) => {
+    const response = await apiClient.delete(`/orders/${orderId}`);
+    return response.data;
+  },
 };
